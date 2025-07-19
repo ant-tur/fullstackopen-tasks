@@ -8,6 +8,22 @@ const Button = ({ onClick, text, emoji }) => {
   );
 };
 
+const StatisticLine = ({ text, value }) => {
+  return (
+    <>
+      {text === 'positive' ? (
+        <p>
+          {text} {value} %
+        </p>
+      ) : (
+        <p>
+          {text} {value}
+        </p>
+      )}
+    </>
+  );
+};
+
 const Statistics = ({ good, neutral, bad }) => {
   const all = good + bad + neutral;
   const average = (good - bad) / all;
@@ -21,12 +37,12 @@ const Statistics = ({ good, neutral, bad }) => {
         <>
           <h2>statistics</h2>
           <div>
-            <p>good {good}</p>
-            <p>neutral {neutral}</p>
-            <p>bad {bad}</p>
-            <p>all {all}</p>
-            <p>average {all ? average : 0}</p>
-            <p>positive {all ? positive : 0} %</p>
+            <StatisticLine text="good" value={good} />
+            <StatisticLine text="neutral" value={neutral} />
+            <StatisticLine text="bad" value={bad} />
+            <StatisticLine text="all" value={all} />
+            <StatisticLine text="average" value={average} />
+            <StatisticLine text="positive" value={positive} />
           </div>
         </>
       )}
