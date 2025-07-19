@@ -8,6 +8,32 @@ const Button = ({ onClick, text, emoji }) => {
   );
 };
 
+const Statistics = ({ good, neutral, bad }) => {
+  const all = good + bad + neutral;
+  const average = (good - bad) / all;
+  const positive = (good / all) * 100;
+
+  return (
+    <>
+      {all === 0 ? (
+        <p>No feedback given</p>
+      ) : (
+        <>
+          <h2>statistics</h2>
+          <div>
+            <p>good {good}</p>
+            <p>neutral {neutral}</p>
+            <p>bad {bad}</p>
+            <p>all {all}</p>
+            <p>average {all ? average : 0}</p>
+            <p>positive {all ? positive : 0} %</p>
+          </div>
+        </>
+      )}
+    </>
+  );
+};
+
 const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
@@ -25,10 +51,6 @@ const App = () => {
     setBad(bad + 1);
   };
 
-  const allClick = good + bad + neutral;
-  const average = (good - bad) / allClick;
-  const positive = (good / allClick) * 100;
-
   return (
     <div>
       <h2>give feedback</h2>
@@ -37,15 +59,7 @@ const App = () => {
         <Button onClick={handleClickNeutral} emoji="😐" text="neutral" />
         <Button onClick={handleClickBad} emoji="👎" text="bad" />
       </div>
-      <h2>statistics</h2>
-      <div>
-        <p>good {good}</p>
-        <p>neutral {neutral}</p>
-        <p>bad {bad}</p>
-        <p>all {allClick}</p>
-        <p>average {allClick ? average : 0}</p>
-        <p>positive {allClick ? positive : 0} %</p>
-      </div>
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   );
 };
