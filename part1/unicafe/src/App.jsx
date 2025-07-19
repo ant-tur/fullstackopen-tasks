@@ -1,5 +1,9 @@
 import { useState } from 'react';
 
+function roundToTwo(num) {
+  return Math.round(num * 100) / 100;
+}
+
 const Button = ({ onClick, text, emoji }) => {
   return (
     <button onClick={onClick}>
@@ -12,13 +16,15 @@ const StatisticLine = ({ text, value }) => {
   return (
     <>
       {text === 'positive' ? (
-        <p>
-          {text} {value} %
-        </p>
+        <tr>
+          <td>{text}</td>
+          <td>{value}%</td>
+        </tr>
       ) : (
-        <p>
-          {text} {value}
-        </p>
+        <tr>
+          <td>{text}</td>
+          <td>{value}</td>
+        </tr>
       )}
     </>
   );
@@ -36,14 +42,16 @@ const Statistics = ({ good, neutral, bad }) => {
       ) : (
         <>
           <h2>statistics</h2>
-          <div>
-            <StatisticLine text="good" value={good} />
-            <StatisticLine text="neutral" value={neutral} />
-            <StatisticLine text="bad" value={bad} />
-            <StatisticLine text="all" value={all} />
-            <StatisticLine text="average" value={average} />
-            <StatisticLine text="positive" value={positive} />
-          </div>
+          <table>
+            <tbody>
+              <StatisticLine text="good" value={good} />
+              <StatisticLine text="neutral" value={neutral} />
+              <StatisticLine text="bad" value={bad} />
+              <StatisticLine text="all" value={all} />
+              <StatisticLine text="average" value={roundToTwo(average)} />
+              <StatisticLine text="positive" value={roundToTwo(positive)} />
+            </tbody>
+          </table>
         </>
       )}
     </>
