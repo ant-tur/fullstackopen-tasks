@@ -11,7 +11,7 @@ const App = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [filterField, setFilterField] = useState('');
 
-  const { getAll, createPerson } = personsService;
+  const { getAll, createPerson, deletePerson } = personsService;
 
   useEffect(() => {
     getAll().then((initialData) => {
@@ -46,6 +46,14 @@ const App = () => {
     setPhoneNumber('');
   };
 
+  const removePerson = (id) => {
+    if (window.confirm('Do you want to remove this person?')) {
+      deletePerson(id).then(() => {
+        setPersons(persons.filter((person) => person.id !== id));
+      });
+    }
+  };
+
   const filteredPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filterField.toLowerCase())
   );
@@ -65,7 +73,7 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} removePerson={removePerson} />
     </div>
   );
 };
