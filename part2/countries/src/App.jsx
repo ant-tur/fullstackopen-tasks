@@ -7,6 +7,7 @@ import Description from './components/Description';
 function App() {
   const [countries, setCountries] = useState([]);
   const [countryName, setCountryName] = useState('');
+  const [chosenCountryId, setChosenCountryId] = useState(null);
 
   const { getAll } = service;
 
@@ -16,8 +17,13 @@ function App() {
     });
   }, []);
 
-  const handleInputChange = event => {
+  const handleFilterChange = event => {
     setCountryName(event.target.value);
+    setChosenCountryId(null);
+  };
+
+  const handleClickButton = id => {
+    setChosenCountryId(id);
   };
 
   const filteredCountries = countries.filter(country =>
@@ -26,8 +32,12 @@ function App() {
 
   return (
     <div>
-      <Form handleInputChange={handleInputChange} />
-      <Description countries={filteredCountries} />
+      <Form handleFilterChange={handleFilterChange} countryName={countryName} />
+      <Description
+        countries={filteredCountries}
+        chosenCountryId={chosenCountryId}
+        onClick={handleClickButton}
+      />
     </div>
   );
 }
