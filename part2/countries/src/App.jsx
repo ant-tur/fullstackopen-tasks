@@ -7,7 +7,7 @@ import Description from './components/Description';
 function App() {
   const [countries, setCountries] = useState([]);
   const [countryName, setCountryName] = useState('');
-  const [chosenCountryId, setChosenCountryId] = useState(null);
+  const [chosenCountryName, setChosenCountryName] = useState('');
 
   const { getAll } = service;
 
@@ -19,11 +19,11 @@ function App() {
 
   const handleFilterChange = event => {
     setCountryName(event.target.value);
-    setChosenCountryId(null);
+    setChosenCountryName('');
   };
 
-  const handleClickButton = id => {
-    setChosenCountryId(id);
+  const handleClickButton = name => {
+    setChosenCountryName(name);
   };
 
   const filteredCountries = countries.filter(country =>
@@ -35,7 +35,7 @@ function App() {
       <Form handleFilterChange={handleFilterChange} countryName={countryName} />
       <Description
         countries={filteredCountries}
-        chosenCountryId={chosenCountryId}
+        chosenCountryName={chosenCountryName}
         onClick={handleClickButton}
       />
     </div>
