@@ -1,7 +1,19 @@
 const express = require('express');
+const morgan = require('morgan');
+
 const app = express();
 
 app.use(express.json());
+
+morgan.token('body', req => {
+  if (req.method === 'POST' || req.method === 'PUT') {
+    return JSON.stringify(req.body);
+  }
+  return '';
+});
+app.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms :body')
+);
 
 let persons = [
   {
@@ -73,7 +85,7 @@ app.post('/api/persons', (request, response) => {
     });
   }
 
-  if (persons.find(pers => body.name === pers.name)) {
+  if (persons.some(pers => body.name === pers.name)) {
     return response.status(400).json({
       error: 'name must be unique',
     });
