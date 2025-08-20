@@ -4,11 +4,6 @@ if (process.argv.length < 3) {
   console.log('give password as argument');
   process.exit(1);
 }
-// else if (process.argv.length === 3) {
-//   console.log('print text');
-// } else {
-//   console.log('create document in mongo.db');
-// }
 
 const password = process.argv[2];
 
