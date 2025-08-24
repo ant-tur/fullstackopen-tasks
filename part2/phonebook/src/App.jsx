@@ -40,14 +40,20 @@ const App = () => {
     };
 
     if (persons.every(p => p.name !== newName)) {
-      createPerson(person).then(returnedPerson => {
-        setMessage(`Adding ${returnedPerson.name}`);
-        setPersons(persons.concat(returnedPerson));
-
-        setTimeout(() => {
-          setMessage(null);
-        }, 3000);
-      });
+      createPerson(person)
+        .then(returnedPerson => {
+          setMessage(`Adding ${returnedPerson.name}`);
+          setPersons(persons.concat(returnedPerson));
+        })
+        .catch(error => {
+          setErrorMessage(error.response.data.error);
+        })
+        .finally(() => {
+          setTimeout(() => {
+            setMessage(null);
+            setErrorMessage(null);
+          }, 3000);
+        });
     } else {
       if (
         window.confirm(
@@ -62,15 +68,9 @@ const App = () => {
             setPersons(
               persons.map(p => (p.id === oldPerson.id ? returnedPerson : p))
             );
-
-            // setTimeout(() => {
-            //   setMessage(null);
-            // }, 3000);
           })
-          .catch(() => {
-            setErrorMessage(
-              `Information of ${person.name} has already been removed from server`
-            );
+          .catch(error => {
+            setErrorMessage(error.response.data.error);
           })
           .finally(() => {
             setTimeout(() => {
@@ -93,10 +93,9 @@ const App = () => {
         .then(() => {
           setPersons(persons.filter(person => person.id !== id));
         })
-        .catch(() => {
-          setErrorMessage(
-            `Information of ${person.name} has already been removed from server`
-          );
+        .catch(error => {
+          setErrorMessage(error.response.data.error);
+          setPersons(persons.filter(p => p.id !== id));
         })
         .finally(() => {
           setTimeout(() => {

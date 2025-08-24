@@ -74,12 +74,14 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(person => {
+      if (!person) {
+        return response.status(404).json({ error: 'Person not found' });
+      }
+
       response.status(204).end();
     })
     .catch(error => next(error));
-
-  response.status(204).end();
 });
 
 app.post('/api/persons', (request, response, next) => {
@@ -90,12 +92,6 @@ app.post('/api/persons', (request, response, next) => {
       error: 'name or phone number missing',
     });
   }
-
-  // if (persons.some(pers => body.name === pers.name)) {
-  //   return response.status(400).json({
-  //     error: 'name must be unique',
-  //   });
-  // }
 
   const person = new Person({
     name: body.name,
@@ -137,7 +133,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
   Person.findById(request.params.id).then(person => {
     if (!person) {
-      return response.status(404).json({ error: 'person not found' });
+      return response.status(404).json({ error: 'Person not found' });
     }
 
     person.number = number;
@@ -159,9 +155,12 @@ app.use(unknownEndpoint);
 
 const errorHandler = (error, request, response, next) => {
   console.error(error.message);
+  console.error(error);
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformed id' });
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message });
   }
 
   next(error);
